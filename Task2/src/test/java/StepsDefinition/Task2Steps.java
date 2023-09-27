@@ -3,12 +3,15 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.Duration;
+
 
 public class Task2Steps {
     private WebDriver driver;
@@ -45,7 +48,7 @@ public class Task2Steps {
     }
     @And("User adds product to the cart")
     public void userAddsProductToTheCart(){
-        driver.findElement(By.xpath("btn-primary")).click();
+        driver.findElement(By.xpath("//*[@data-button-action='add-to-cart']")).click();
     }
     @And("User goes to the checkout section")
     public void userGoesToTheCheckoutSection(){
@@ -60,21 +63,23 @@ public class Task2Steps {
 
     @And("User selects the payment and delivery method")
     public void userSelectsPaymentAndDeliveryMethod(){
-        driver.findElement(By.id("delivery_option_8")).click();
+        //driver.findElement(By.id("delivery_option_8")).click();
         driver.findElement(By.name("confirmDeliveryOption")).click();
-        driver.findElement(By.xpath("//*[@id=\"payment-option-1-container\"]/span/span")).click();
+        driver.findElement(By.xpath("//*[@id=\"payment-option-1\"]")).click();
         driver.findElement(By.id("conditions_to_approve[terms-and-conditions]")).click();
         driver.findElement(By.xpath("//*[contains(text(),\"Place order\")]")).click();
 
     }
-    @Then("Order is confirmed")
+   @Then("Order is confirmed,user sees a message {string}")
     public void orderIsConfirmed(String alertText){
-        WebElement orderConfirmationAlert = driver.findElement(By.className("rtl-no-flip"));
+        WebElement orderConfirmationAlert = driver.findElement(By.className("card-title"));
         Assertions.assertTrue(orderConfirmationAlert.isDisplayed(),"Confirmation alert should be visible");
         Assertions.assertEquals(alertText,orderConfirmationAlert.getText());
     }
     @And("Do a screenshot")
-    public void doAscreenshot(){
+    public void doAscreenshot() throws IOException {
+        File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(screenshot,new File(("D:\\CodersLab - materiały\\screnshot1.jpg")));
 
     }
     @And("The user closes the browser")

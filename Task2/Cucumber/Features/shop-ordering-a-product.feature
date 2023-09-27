@@ -9,6 +9,6 @@ Feature: Ordering a product
     And User goes to the checkout section
     And User verify address
     And User selects the payment and delivery method
-    Then Order is confirmed
+    Then Order is confirmed,user sees a message "YOUR ORDER IS CONFIRMED"
     And Do a screenshot
     And The user closes the browser
